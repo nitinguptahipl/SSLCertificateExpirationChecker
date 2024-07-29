@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSL Certificate Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px auto;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>SSL Certificate Checker</h1>
+  <table id="results">
+    <thead>
+      <tr>
+        <th>Website</th>
+        <th>Expiration Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="results-table-body">
+      </tbody>
+  </table>
+
+  <script>
+    async function checkSSLCertificates() {
+      const response = await fetch('/check-ssl');
+      const results = await response.json();
+
+      const tbody = document.getElementById('results-table-body');
+
+      results.forEach(result => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${result.website}</td>
+          <td>${result.expirationDate}</td>
+          <td>${result.status}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    checkSSLCertificates(); // Call the function on page load
+  </script>
+</body>
+</html>

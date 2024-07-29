@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL Certificate Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SSL Certificate Checker</h1>
+        <input type="text" id="website" placeholder="Enter website URL (e.g., https://example.com)">
+        <button onclick="checkSSLCertificate()">Check SSL Certificate</button>
+        <table id="results">
+            <thead>
+                <tr>
+                    <th>Website</th>
+                    <th>Expiration Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function checkSSLCertificate() {
+            const website = document.getElementById('website').value;
+            if (!website) {
+                alert('Please enter a website URL');
+                return;
+            }
+            const response = await fetch('/check-ssl', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ website })
+            });
+            const result = await response.json();
+            const tbody = document.querySelector('#results tbody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${result.website}</td>
+                <td>${result.expirationDate}</td>
+                <td>${result.status}</td>
+            `;
+            tbody.appendChild(row);
+        }
+    </script>
+</body>
+</html>
